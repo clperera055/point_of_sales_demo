@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @EnableJpaRepositories
@@ -20,4 +22,9 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
     @Query(value = "update customer set customer_name=?1, customer_address=?2, customer_salary=?3, " +
             "contact_numbers=?4, active_state=?5 where customer_id",nativeQuery = true)
     void updateCustomer(String customerName, String customerAddress, double customerSalary, ArrayList contactNumbers, boolean activeState);
+
+    List<Customer> findAllByCustomerNameAndActiveStateEquals(String name, boolean val);
+
+    List<Customer> findAllByActiveStateEquals(boolean val);
+
 }

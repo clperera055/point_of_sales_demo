@@ -3,6 +3,8 @@ package com.example.demo.util.mappers;
 import com.example.demo.dto.CustomerDTO;
 import com.example.demo.dto.request.CustomerSaveDTO;
 import com.example.demo.dto.request.CustomerUpdateDTO;
+import com.example.demo.dto.response.ResponseActiveCustomerDTO;
+import com.example.demo.dto.response.ResponseCustomerDetails;
 import com.example.demo.entity.Customer;
 import org.mapstruct.Mapper;
 
@@ -16,4 +18,10 @@ public interface CustomerMapper {
     CustomerDTO getCustomerById(Customer customer);
 
     List<CustomerDTO> entityListToDtoList(List<Customer> customers);
+
+    List<CustomerDTO> getActiveCustomersByName(List<Customer> list);
+
+    List<ResponseActiveCustomerDTO> responseActiveCustomerList(List<Customer> customerList);
+
+
 }

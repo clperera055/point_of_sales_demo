@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.dto.CustomerDTO;
 import com.example.demo.dto.request.CustomerSaveDTO;
 import com.example.demo.dto.request.CustomerUpdateDTO;
+import com.example.demo.dto.response.ResponseActiveCustomerDTO;
+import com.example.demo.dto.response.ResponseCustomerDetails;
 import com.example.demo.service.CustomerService;
 import com.example.demo.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,4 +58,23 @@ public class CustomerController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/get-customer-by-name/{name}")
+    public ResponseEntity<StandardResponse> getCustomerByName(@PathVariable (value = "name") String name){
+        List <CustomerDTO> list = customerService.getCustomerByName(name);
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,  " All Customers", list),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/get-all-active-customers")
+    public ResponseEntity<StandardResponse> getAllActiveCustomers(){
+        List <ResponseActiveCustomerDTO> activeCustomerDTOList = customerService.getAllActiveCustomers();
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,  " All Active Customers", activeCustomerDTOList),
+                HttpStatus.OK
+        );
+    }
+
 }
