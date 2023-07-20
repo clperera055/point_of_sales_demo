@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CustomerDTO;
 import com.example.demo.dto.request.CustomerSaveDTO;
 import com.example.demo.dto.request.CustomerUpdateDTO;
 import com.example.demo.service.CustomerService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customer")
@@ -36,4 +39,21 @@ public class CustomerController {
         );
     }
 
+    @GetMapping("/get-customer-by-id/{id}")
+    public ResponseEntity<StandardResponse> getCustomerById(@PathVariable (value = "id") int id){
+        CustomerDTO customerById = customerService.getCustomerById(id);
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,  " Customer's details...", customerById),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/get-all-customers")
+    public ResponseEntity<StandardResponse> getAllCustomers(){
+        List <CustomerDTO> list = customerService.getAllCustomers();
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,  " All Customers", list),
+                HttpStatus.OK
+        );
+    }
 }
