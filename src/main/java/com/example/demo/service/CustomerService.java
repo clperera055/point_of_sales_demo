@@ -21,4 +21,9 @@ public interface CustomerService {
 
     List<ResponseActiveCustomerDTO> getAllActiveCustomers();
 
+    List<CustomerDTO> getAllCustomersByState(boolean status);
+
+    int getAllCustomersByCount(boolean val);
+
+    int getAllCustomerCount();
 }

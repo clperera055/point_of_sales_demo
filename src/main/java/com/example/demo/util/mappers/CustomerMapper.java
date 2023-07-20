@@ -24,4 +24,5 @@ public interface CustomerMapper {
     List<ResponseActiveCustomerDTO> responseActiveCustomerList(List<Customer> customerList);
 
 
+    List<CustomerDTO> getAllCustomersByActiveStatus(List<Customer> customers);
 }

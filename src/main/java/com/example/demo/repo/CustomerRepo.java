@@ -27,4 +27,5 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 
     List<Customer> findAllByActiveStateEquals(boolean val);
 
+    int countAllByActiveStateEquals(boolean val);
 }

@@ -95,6 +95,28 @@ public class CustomerServiceImpl implements CustomerService {
             throw new EntryNotFoundException("Invalid Request.......");
     }
 
+    @Override
+    public List<CustomerDTO> getAllCustomersByState(boolean status) {
+        List<Customer> customers = customerRepo.findAllByActiveStateEquals(status);
+        if(customers.size() > 0){
+            List<CustomerDTO> customerDTOS = customerMapper.getAllCustomersByActiveStatus(customers);
+            return customerDTOS;
+        }else
+            throw new EntryNotFoundException("Invalid Entry...");
+
+    }
+
+    @Override
+    public int getAllCustomersByCount(boolean val) {
+        int count = customerRepo.countAllByActiveStateEquals(val);
+        return count;
+    }
+
+    @Override
+    public int getAllCustomerCount() {
+        int count = (int) customerRepo.count();
+        return count;
+    }
 
 
 }
