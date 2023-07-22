@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.dto.CustomerDTO;
 import com.example.demo.dto.request.CustomerSaveDTO;
 import com.example.demo.dto.request.CustomerUpdateDTO;
-import com.example.demo.dto.response.ResponseActiveCustomerDTO;
 import com.example.demo.service.CustomerService;
 import com.example.demo.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,64 +66,9 @@ public class CustomerController {
         );
     }
 
-    @GetMapping("/get-all-active-customers")
-    public ResponseEntity<StandardResponse> getAllActiveCustomers() {
-        List<ResponseActiveCustomerDTO> activeCustomerDTOList = customerService.getAllActiveCustomers();
-        return new ResponseEntity<StandardResponse>(
-                new StandardResponse(200, " All Active Customers", activeCustomerDTOList),
-                HttpStatus.OK
-        );
-    }
 
-    @GetMapping("/get-all-customers-by-state/{state}")
-    public ResponseEntity<StandardResponse> getAllActiveCustomersByState(@PathVariable(value = "state") String state) {
 
-        if (state.equalsIgnoreCase("active") || state.equalsIgnoreCase("inactive")) {
-            boolean status = state.equalsIgnoreCase("active") ? true : false;
-            List<CustomerDTO> customerDTOList = customerService.getAllCustomersByState(status);
-            return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(200, " All Active Customers by State ....", customerDTOList),
-                    HttpStatus.OK
-            );
-        } else if (state.equalsIgnoreCase("all")) {
-            List<CustomerDTO> customerDTOList = customerService.getAllCustomers();
-            return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(200, " All Active Customers by State ....", customerDTOList),
-                    HttpStatus.OK
-            );
 
-        } else {
-            String e = "Error";
-            return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(200, "Invalid data input ....", e),
-                    HttpStatus.OK
-            );
-        }
 
-    }
-
-    @GetMapping("/get-all-customers-by-count/{state}")
-    public ResponseEntity<StandardResponse> getAllCustomersByCount(@PathVariable(value = "state") String state) {
-        if (state.equalsIgnoreCase("active") || state.equalsIgnoreCase("inactive")) {
-            boolean val = state.equalsIgnoreCase("active") ? true : false;
-            int count = customerService.getAllCustomersByCount(val);
-            return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(200, "All " + state + " customers...", count),
-                    HttpStatus.OK
-            );
-        } else if (state.equalsIgnoreCase("all")) {
-            int count = customerService.getAllCustomerCount();
-            return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(200, "All " + state + " customers...", count),
-                    HttpStatus.OK
-            );
-        } else {
-            String t = "Error";
-            return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(200, "Invalid state entry....", t),
-                    HttpStatus.OK
-            );
-        }
-    }
 
 }
