@@ -1,6 +1,10 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.QueryInterface.OrderDetailsInterface;
+import com.example.demo.dto.paginate.PaginatedResponseOrderDetails;
 import com.example.demo.dto.request.OrderRequestSaveDTO;
+import com.example.demo.dto.response.ResponseOrderDetailsDTO;
+import com.example.demo.entity.Item;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderDetails;
 import com.example.demo.exception.EntryNotFoundException;
@@ -12,8 +16,10 @@ import com.example.demo.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,8 +67,42 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailsRepo.saveAll(orderDetails);
             }
 
+            //stock management items
+//            List<Item> updateQuantityItemList = new ArrayList<>();
+//            for (Item item: updateQuantityItemList) {
+//                   double updateBalance = item.getBalanceQty() - orderDetails.get(0).getQty();
+//                   item.setBalanceQty(updateBalance);
+//                   updateQuantityItemList.set(item.getItemId(),  );
+//            }
+
             return "saved";
         }
         throw new EntryNotFoundException("Order Save Unsuccessful....");
+    }
+
+    @Override
+    public PaginatedResponseOrderDetails getAllOrderDetails(boolean status, int page, int size) {
+        List<OrderDetailsInterface> orderDetailsInterfaces = orderRepo.getAllOrderDetails(status, PageRequest.of(page, 2));
+        List<ResponseOrderDetailsDTO> dtoList = new ArrayList<>();
+
+        for (OrderDetailsInterface o: orderDetailsInterfaces) {
+              ResponseOrderDetailsDTO responseOrderDetailsDTO = new ResponseOrderDetailsDTO(
+                o.getCustomerName(),o.getCustomerAddress(),o.getContactNumbers(),
+                      o.getDate(), o.getTotal()
+              );
+              dtoList.add(responseOrderDetailsDTO);
+
+//              dtoList.add(
+//                      new ResponseOrderDetailsDTO(
+//                              o.getCustomerName(),o.getCustomerAddress(),o.getContactNumbers(),
+//                              o.getDate(), o.getTotal()
+//                      )
+//              );
+        }
+
+        PaginatedResponseOrderDetails paginatedResponseOrderDetails = new PaginatedResponseOrderDetails(
+          dtoList, orderRepo.countAllOrderDetails(status)
+        );
+        return paginatedResponseOrderDetails;
     }
 }
