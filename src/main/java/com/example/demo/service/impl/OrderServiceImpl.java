@@ -67,14 +67,6 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailsRepo.saveAll(orderDetails);
             }
 
-            //stock management items
-//            List<Item> updateQuantityItemList = new ArrayList<>();
-//            for (Item item: updateQuantityItemList) {
-//                   double updateBalance = item.getBalanceQty() - orderDetails.get(0).getQty();
-//                   item.setBalanceQty(updateBalance);
-//                   updateQuantityItemList.set(item.getItemId(),  );
-//            }
-
             return "saved";
         }
         throw new EntryNotFoundException("Order Save Unsuccessful....");
