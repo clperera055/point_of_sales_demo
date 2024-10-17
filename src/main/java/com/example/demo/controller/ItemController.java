@@ -6,6 +6,7 @@ import com.example.demo.dto.paginate.ResponseItemDTOPage;
 import com.example.demo.dto.request.ItemSaveDTO;
 import com.example.demo.dto.request.ItemUpdateDTO;
 import com.example.demo.dto.response.ResponseActiveItemsDTO;
+import com.example.demo.dto.response.ResponseItemCountDTO;
 import com.example.demo.service.ItemService;
 import com.example.demo.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,13 +61,13 @@ public class ItemController {
                     new StandardResponse(202, " Successfully Updated...", itemDTOS),
                     HttpStatus.ACCEPTED
             );
-        }else if(state.equalsIgnoreCase("all")){
+        } else if (state.equalsIgnoreCase("all")) {
             List<ItemDTO> itemDTOS = itemService.getAllItems();
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(202, " Successfully Updated...", itemDTOS),
                     HttpStatus.ACCEPTED
             );
-        }else {
+        } else {
             String error = "Error";
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(202, "Invalid State Entry...", error),
@@ -93,13 +94,13 @@ public class ItemController {
                     new StandardResponse(202, "All " + state + " count...", count),
                     HttpStatus.ACCEPTED
             );
-        }else if(state.equalsIgnoreCase("all")){
+        } else if (state.equalsIgnoreCase("all")) {
             int count = itemService.countAll();
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(202, "All items count...", count),
                     HttpStatus.ACCEPTED
             );
-        }else {
+        } else {
             String error = "Error";
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(202, "Invalid State Entry...", error),
@@ -108,8 +109,35 @@ public class ItemController {
         }
     }
 
+    @GetMapping(path = {"/get-items-with-count"},
+            params = {"state"})
+    public ResponseEntity<StandardResponse> getItemsWithCount(@RequestParam (value = "state") String state){
+
+        if(state.equalsIgnoreCase("active") || state.equalsIgnoreCase("inactive")){
+            boolean status = state.equalsIgnoreCase("active") ? true : false;
+//            ResponseItemCountDTO itemCountDTO = itemService.getItemsWithCount(status);
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(200, "All " + state + " items",  itemService.getItemsWithCount(status)),
+                    HttpStatus.OK
+            );
+        }else if(state.equalsIgnoreCase("all")){
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(200, "All  items",  itemService.getAllItemsWithCount()),
+                    HttpStatus.OK
+            );
+        }else{
+            String e = "Invalid Input";
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(200, "Error...",  e),
+                    HttpStatus.OK
+            );
+        }
+
+
+    }
+
     @GetMapping("/get-all-items-by-page/{page}")
-    public ResponseEntity<StandardResponse> getAllItemsByPage(@PathVariable (value = "page") int page) {
+    public ResponseEntity<StandardResponse> getAllItemsByPage(@PathVariable(value = "page") int page) {
         int size = 0;
         ResponseItemDTOPage itemPage = itemService.getAllItemsByPage(page, size);
         return new ResponseEntity<StandardResponse>(
@@ -119,9 +147,9 @@ public class ItemController {
     }
 
     @GetMapping("/get-all-active-items-page/{page}")
-    public ResponseEntity<StandardResponse> getAllActiveItemsByPage(@PathVariable (value = "page") int page) {
+    public ResponseEntity<StandardResponse> getAllActiveItemsByPage(@PathVariable(value = "page") int page) {
         int size = 0;
-        ResponseActiveItemPage itemPage = itemService.getAllActiveItemsByPage(page, size);
+       ResponseActiveItemPage itemPage = itemService.getAllActiveItemsByPage(page, size);
         return new ResponseEntity<StandardResponse>(
                 new StandardResponse(201, "All active items in page : " + page, itemPage),
                 HttpStatus.CREATED
@@ -130,22 +158,22 @@ public class ItemController {
 
     @GetMapping("/get-all-items-page-by-state/{page},{state}")
     public ResponseEntity<StandardResponse> getAllItemsPageByState(@PathVariable(value = "page") int page,
-                                                                   @PathVariable (value = "state") String state) {
+                                                                   @PathVariable(value = "state") String state) {
         int size = 0;
-        if(state.equalsIgnoreCase("active") || state.equalsIgnoreCase("inactive")){
+        if (state.equalsIgnoreCase("active") || state.equalsIgnoreCase("inactive")) {
             boolean val = state.equalsIgnoreCase("active") ? true : false;
-            ResponseActiveItemPage itemPage = itemService.getAllItemsPageByState(val ,page, size);
+            ResponseActiveItemPage itemPage = itemService.getAllItemsPageByState(val, page, size);
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(201, "All " + state + " items in page : " + page, itemPage),
                     HttpStatus.CREATED
             );
-        }else if(state.equalsIgnoreCase("all")){
-            ResponseActiveItemPage itemPage = itemService.getAllItemPages(page,size);
+        } else if (state.equalsIgnoreCase("all")) {
+            ResponseActiveItemPage itemPage = itemService.getAllItemPages(page, size);
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(201, "All items in page : " + page, itemPage),
                     HttpStatus.CREATED
             );
-        }else{
+        } else {
             String ex = "error";
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(201, "Invalid state entry.....", ex),

@@ -24,4 +24,6 @@ public interface ItemMapper {
     List<ResponseActiveItemsDTO> getAllItemsPageByState(Page<Item> getAllItemsPageByState);
 
     List<ResponseActiveItemsDTO> getAllItemPages(Page<Item> itemPage);
+
+    List<ItemDTO> entityListToDtoList(List<Item> items);
 }

@@ -6,6 +6,7 @@ import com.example.demo.dto.paginate.ResponseItemDTOPage;
 import com.example.demo.dto.request.ItemSaveDTO;
 import com.example.demo.dto.request.ItemUpdateDTO;
 import com.example.demo.dto.response.ResponseActiveItemsDTO;
+import com.example.demo.dto.response.ResponseItemCountDTO;
 
 import java.util.List;
 
@@ -32,4 +33,8 @@ public interface ItemService {
     ResponseActiveItemPage getAllItemsPageByState(boolean val, int page, int size);
 
     ResponseActiveItemPage getAllItemPages(int page, int size);
+
+    ResponseItemCountDTO getItemsWithCount(boolean status);
+
+    ResponseItemCountDTO getAllItemsWithCount();
 }

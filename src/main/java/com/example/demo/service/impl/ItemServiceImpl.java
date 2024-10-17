@@ -6,6 +6,7 @@ import com.example.demo.dto.paginate.ResponseItemDTOPage;
 import com.example.demo.dto.request.ItemSaveDTO;
 import com.example.demo.dto.request.ItemUpdateDTO;
 import com.example.demo.dto.response.ResponseActiveItemsDTO;
+import com.example.demo.dto.response.ResponseItemCountDTO;
 import com.example.demo.entity.Item;
 import com.example.demo.exception.EntryDuplicationException;
 import com.example.demo.exception.EntryNotFoundException;
@@ -140,6 +141,34 @@ public class ItemServiceImpl implements ItemService {
                 itemMapper.getAllItemPages(itemPage),
                 itemRepo.count()
         );
+    }
+
+    @Override
+    public ResponseItemCountDTO getItemsWithCount(boolean status) {
+        List<Item> items = itemRepo.findAllByActiveStateEquals(status);
+        if(items.size() > 0 ){
+            List<ItemDTO> dtoList = itemMapper.findAllByActiveStateEquals(items);
+
+            return new ResponseItemCountDTO(
+                    dtoList,
+                    itemRepo.countAllByActiveStateEquals(status)
+            );
+        }else
+            throw new EntryNotFoundException("No Items");
+    }
+
+    @Override
+    public ResponseItemCountDTO getAllItemsWithCount() {
+        List<Item> items = itemRepo.findAll();
+        if(items.size() > 0){
+            List<ItemDTO> dtoList = itemMapper.entityListToDtoList(items);
+
+            return new ResponseItemCountDTO(
+                    dtoList,
+                    itemRepo.count()
+            );
+        }else
+            throw new EntryNotFoundException("No entry....");
     }
 
 
